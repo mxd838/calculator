@@ -6,6 +6,12 @@
 }
 
 /* General - Layout */
+@font-face {
+    font-family: digital7;
+    src: url('./assets/fonts/digital-7.ttf')
+}
+
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background: #333;
@@ -31,6 +37,12 @@ body {
     margin: 20px 0 15px;
     background: rgb(221, 220, 220);
     border-radius: 3%;
+    font-family: digital7;
+    font-size: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-bottom: 15px;
 }
 
 .buttons {
@@ -57,8 +69,9 @@ body {
     border-radius: 5%;
 }
 
-.equal {
-    grid-column: 3 / 5;
+
+.button[data-modif="equal"] {
+        grid-column: 3 / 5;
 }
 
 

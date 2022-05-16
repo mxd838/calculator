@@ -1,10 +1,3 @@
-// queryselector all pour tous les
-// - data-modif
-// - data-operation
-// - data-number
-
-// forEach - listener pour chq elt de ces listes
-// 3 variables : operande 1, operande 2, operation
 // mvp : gestion d'une seule operation
 
 // v2 : gestion d'un nombre indef d'operations 
@@ -23,18 +16,42 @@ const modifications = document.querySelectorAll('.button[data-modif]')
 const display = document.querySelector('.display')
 
 // Variables
-// -- inputs : operand1, operator, operand2
 let operand1 = ''
 let sign = ''
 let operand2 = ''
 
 
 // Functions
-// -- after the calculcation (precisely, after the sign equal inputed), reset the 3 variables to undefined
+// -- after the calculcation (precisely, after the sign equal inputed), reset the 3 variables to ''
+
+
+// Choose operation
+const chooseOperation = () => {
+    let result
+    switch(sign){
+        case '+':
+            result = add(Number(operand1), Number(operand2))
+            break
+        case '-':
+            result = substract(Number(operand1), Number(operand2))
+            break
+        case '*':
+            result = multiply(Number(operand1), Number(operand2))
+            break
+        case '÷':
+            result = divide(Number(operand1), Number(operand2))
+            break
+        default:
+            console.log('Operation not allowed')
+    }
+    return result
+}
+
 // Add
 const add = (nb1, nb2) => {
     return nb1 + nb2
 }
+
 // Substract
 const substract = (nb1, nb2) => {
     return nb1 - nb2
@@ -45,7 +62,6 @@ const divide = (nb1, nb2) => {
         return nb1 / nb2
     }
 }
-// -- display.innerHTML += number.innerText
 // Multiply
 const multiply = (nb1, nb2) => {
     return nb1 * nb2
@@ -56,14 +72,7 @@ const showOperation = (input) => {
     display.innerText += input
 }
 
-const showResult = () => {
 
-}
-// Convert string to number
-// chooseOperation
-
-
-// console.log(operand1.length)
 
 // Event listeners
 // -- set the operands and sign to the user inputs 
@@ -71,7 +80,6 @@ const showResult = () => {
 numbers.forEach( number => {
     number.addEventListener('click', ()=> {
 
-        // console.log(number.innerText)
         const digitInput = number.innerText
 
         showOperation(digitInput)
@@ -99,7 +107,6 @@ operators.forEach( operator => {
 
 modifications.forEach( modification => {
     modification.addEventListener('click', ()=> {
-        // console.log(modification.innerText)
         // different cases :
         // - clear :
         // --- remove all display
@@ -113,6 +120,14 @@ modifications.forEach( modification => {
         // --- call the calculation function
         // --- call the showResult function 
         // --- reset the variables 
+        if (modification.innerText === '='){
+           if ( operand1.length !== 0 && sign.length !== 0 && operand2.length !== 0){
+                display.innerHTML = chooseOperation()
+                operand1 = ''
+                sign = ''
+                operand2 = ''
+           }
+        }
     })
 })
 

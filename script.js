@@ -19,6 +19,8 @@ const display = document.querySelector('.display')
 let operand1 = ''
 let sign = ''
 let operand2 = ''
+let resultDisplayed = false
+
 
 
 // Functions
@@ -61,6 +63,7 @@ const divide = (nb1, nb2) => {
     if (nb2 !== 0){
         return nb1 / nb2
     }
+    // handle case where nb2 == 0
 }
 // Multiply
 const multiply = (nb1, nb2) => {
@@ -80,6 +83,10 @@ const showOperation = (input) => {
 numbers.forEach( number => {
     number.addEventListener('click', ()=> {
 
+        if(resultDisplayed && operand1.length === 0){
+            display.innerText = ''
+        }
+
         const digitInput = number.innerText
 
         showOperation(digitInput)
@@ -94,6 +101,10 @@ numbers.forEach( number => {
 
 operators.forEach( operator => {
     operator.addEventListener('click', ()=> {
+
+        if (resultDisplayed && operand1.length === 0){
+            return
+        }
         
         // Prevent user from inputting multiple operators
         if (sign.length === 0){
@@ -107,25 +118,47 @@ operators.forEach( operator => {
 
 modifications.forEach( modification => {
     modification.addEventListener('click', ()=> {
-        // different cases :
-        // - clear :
-        // --- remove all display
-        // --- reset all values
-        // - del :
-        // --- remove the last displayed item
-        // - . :
-        // --- add the . to the display
-        // --- don't display if already a . in the current digit
-        // - = :
-        // --- call the calculation function
-        // --- call the showResult function 
-        // --- reset the variables 
-        if (modification.innerText === '='){
+   
+        if (modification.innerText === '.'){
+            if (sign.length === 0 && !operand1.includes('.')){
+                operand1 += '.'
+                display.innerText += '.'
+            } 
+            else if (sign.length !== 0 && !operand2.includes('.')){
+                operand2 += '.'
+                display.innerText += '.'
+            }
+            
+        }
+        else if (modification.innerText === 'clear'){
+            display.innerText = ''
+            operand1 = ''
+            sign = ''
+            operand2 = ''
+            resultDisplayed = false
+        }
+        else if (modification.innerText === 'del'){
+            if (operand1.length === 0) {
+                return
+            }
+            if (sign.length === 0 && operand1.length !== 0){
+                 operand1 = operand1.slice(0,-1)
+            }
+            else if (operand2.length === 0){
+                sign = ''
+            } 
+            else {
+                operand2 = operand2.slice(0,-1)
+            }
+            display.innerText = display.innerText.slice(0,-1)
+        }
+        else if (modification.innerText === '='){
            if ( operand1.length !== 0 && sign.length !== 0 && operand2.length !== 0){
                 display.innerHTML = chooseOperation()
                 operand1 = ''
                 sign = ''
                 operand2 = ''
+                resultDisplayed = true
            }
         }
     })

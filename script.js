@@ -2,6 +2,9 @@
 
 // v2 : gestion d'un nombre indef d'operations 
 // en remplacant a chaque fois operande 1 par le resultat de la precedente operation
+// -- si 3 variables (operand1, sign, operand2) non vides, et input nouveau signe
+// -- remplace operand1 par result operation
+// -- display cette operation sur nouvelle ligne
 
 // v3 : gestion du clavier
 
@@ -24,8 +27,6 @@ let resultDisplayed = false
 
 
 // Functions
-// -- after the calculcation (precisely, after the sign equal inputed), reset the 3 variables to ''
-
 
 // Choose operation
 const chooseOperation = () => {
@@ -41,10 +42,17 @@ const chooseOperation = () => {
             result = multiply(Number(operand1), Number(operand2))
             break
         case '÷':
-            result = divide(Number(operand1), Number(operand2))
+            if(Number(operand2) === 0){
+                result = undefined
+            } else {
+                result = divide(Number(operand1), Number(operand2))
+            }
+            break
+        case '%':
+            result = percentage(Number(operand1),Number(operand2))
             break
         default:
-            console.log('Operation not allowed')
+            result = undefined
     }
     return result
 }
@@ -60,16 +68,16 @@ const substract = (nb1, nb2) => {
 }
 // Divide
 const divide = (nb1, nb2) => {
-    if (nb2 !== 0){
         return nb1 / nb2
-    }
-    // handle case where nb2 == 0
 }
 // Multiply
 const multiply = (nb1, nb2) => {
     return nb1 * nb2
 }
 // Percentage
+const percentage = (nb1, nb2) => {
+    return nb2 * (nb1/100)
+}
 // Display
 const showOperation = (input) => {
     display.innerText += input
@@ -154,7 +162,12 @@ modifications.forEach( modification => {
         }
         else if (modification.innerText === '='){
            if ( operand1.length !== 0 && sign.length !== 0 && operand2.length !== 0){
-                display.innerHTML = chooseOperation()
+                const operationReturn = chooseOperation()
+                if (operationReturn === undefined){
+                    display.innerText = 'Operation not allowed'
+                } else {
+                    display.innerHTML = chooseOperation()
+                }
                 operand1 = ''
                 sign = ''
                 operand2 = ''
